@@ -1,0 +1,99 @@
+import nltk
+import webbrowser
+from nltk.tokenize import word_tokenize 
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.corpus import stopwords
+stoplist = stopwords.words('english')
+//version 2
+
+
+hello_words = ["hello","hi","namaste","hey"]
+care_words = ["how are you","how's you","what's up","wassup","sup","what's goin"]
+search_words = ['google','search','check']
+map_words = ['locate','location','find on map','google map','map']
+youtube_words = ['play','youtube']
+direction_words = ['route','direction','way','path']
+wiki_words = ['article','topic','theory']
+
+def useful_words(sentence,lemmatizer):
+	return [lemmatizer.lemmatize(word.lower()) for word in word_tokenize(unicode(sentence, errors='ignore'))]
+
+def stopwords_remove(words):
+	list_of_words = []
+	for word in words:
+		if word in stoplist:
+			continue
+		else:
+			list_of_words.append(word)
+	return list_of_words
+
+if __name__ == "__main__":
+	lemmatizer = WordNetLemmatizer()
+	list_of_words = []
+	sentence = raw_input('Type your sentence and press enter: ')
+	import time
+	words = useful_words(sentence,lemmatizer)
+	list_of_words = stopwords_remove(words)
+	#now the sentence is processed to get useful words only
+	for word in list_of_words:
+		print word
+
+	#some standard replies for greeting
+	for word in list_of_words:
+		if word in hello_words:
+			print ('Hi, Nice to see you')
+
+	#searching care words
+	for line in care_words:
+		if line in sentence:
+			print ('I am fine how are you doing?')
+			break
+
+	for word in list_of_words:
+		if word in search_words:
+			search = raw_input('\"what do you want to search on google?\" \n\n iif nothing then press tab')
+			if (search != '\t'):
+				tabUrl = 'https://www.google.co.in/#q='
+				webbrowser.open(tabUrl+search)
+
+	temp = 0
+	for line in map_words:
+		if line in sentence:
+			if(temp!= 1):
+				search = raw_input('\"what do you want to find on google maps?\" \n\n if nothing then press tab')
+				if (search != '\t'):
+					tabUrl = 'https://www.google.co.in/maps/place/'
+					webbrowser.open(tabUrl+search)
+					temp = 1
+
+	for word in list_of_words:
+		if word in youtube_words:
+			search = raw_input('\"what do you want to play on youtube?\" \n\n if nothing then press tab')
+			if (search != '\t'):
+				tabUrl = 'https://www.youtube.com/results?search_query='
+				webbrowser.open(tabUrl+search)
+
+
+	for word in list_of_words:
+		if word in direction_words:
+			destination = raw_input('\"where do you want to go?\" \n\n if nothing then press tab')
+			initial = raw_input('\"from where?\" \n\n if nothing then press tab"')
+
+			if ((initial != '\t') and (destination != '\t')):
+				tabUrl = 'https://www.google.co.in/maps/dir/'
+				webbrowser.open(tabUrl+initial+'/'+destination+'/')
+
+	for word in list_of_words:
+		if word in wiki_words:
+			search = raw_input('\"what topic do you want info on?\" \n\n if nothing then press tab')
+			if (search != '\t'):
+				tabUrl = 'https://en.wikipedia.org/wiki/'
+				webbrowser.open(tabUrl+search)
+
+
+
+
+
+
+
+
